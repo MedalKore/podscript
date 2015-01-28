@@ -1,0 +1,12 @@
+#pending_orders
+	-if @pending_orders.first.nil?
+		%p
+			You don't have any pending orders.
+			= link_to "Place one now.", place_an_order_url
+	-else
+		%table
+			-@pending_orders.each do |o|
+				%tr
+					%td= o.podcast_title
+					%td= o.podcast_subject
+					%td This transcript is pending. We'll let you know when it is finished.

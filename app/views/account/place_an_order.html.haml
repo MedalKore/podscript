@@ -1,0 +1,17 @@
+#place_an_order
+	= form_for Order.new, url: create_order_url, mulitpart: :true do |o|
+		%table
+			%tr
+				%td Podcast Title
+				%td= o.text_field :podcast_title
+			%tr
+				%td Order of Appearance of Podcast Participants(Separate with commas)
+				%td= o.text_area :order_of_appearance
+			%tr
+				%td Podcast Subject	
+				%td= o.text_field :podcast_subject
+			%tr
+				%td Upload Podcast
+				%td
+			%tr
+				%td= o.submit 'Place Order'

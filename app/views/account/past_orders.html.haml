@@ -1,0 +1,12 @@
+#past_orders
+	-if @orders.first.nil?
+		%p
+			You don't have any past orders.
+			= link_to "Place one now.", place_an_order_url
+	-else
+		%table
+			-@orders.each do |o|
+				%tr
+					%td= o.podcast_title
+					%td= o.podcast_subject
+					%td= link_to 'Download Transcript', o.transcript
