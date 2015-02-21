@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 	def employee_user
 		@employee ||= Employee.find_by(auth_token: cookies[:auth_token])
 	end
-	
+
 	def admin_user
 		@admin ||= Admin.find_by(auth_token: (cookies[:auth_token]))
 	end
@@ -26,5 +26,7 @@ class ApplicationController < ActionController::Base
   def current_user=(user)
     @current_user = user
   end
+
+  
 
 end

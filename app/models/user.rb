@@ -15,4 +15,8 @@ class User < ActiveRecord::Base
 			self[column] = SecureRandom.urlsafe_base64
 		end while User.exists?(column => self[column])
 	end
+
+	def pending_orders
+		orders.where(transcript: :nil)
+	end
 end

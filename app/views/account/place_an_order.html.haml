@@ -1,17 +1,46 @@
-#place_an_order
-	= form_for Order.new, url: create_order_url, mulitpart: :true do |o|
-		%table
+#place_an_order.content
+	%table
+		= form_for Order.new, url: create_order_url, mulitpart: :true, html: {class: 'new_order form-horizontal'} do |o|
 			%tr
-				%td Podcast Title
+				%td= o.label :podcast_title, 'Podcast Title: '
 				%td= o.text_field :podcast_title
+
 			%tr
-				%td Order of Appearance of Podcast Participants(Separate with commas)
+				%td= o.label :order_of_appearance, raw("Order of Appearance of Podcast Participants: <br><span>(Separate with commas)</span>"), id: 'participants'
 				%td= o.text_area :order_of_appearance
+
 			%tr
-				%td Podcast Subject	
+				%td= o.label :podcast_subject, 'Podcast Subject: ', class: 'control-label'
 				%td= o.text_field :podcast_subject
+			
 			%tr
-				%td Upload Podcast
+				%td= o.label :podcast, 'Upload Podcast: ', class: 'control-label'
+				%td= o.file_field :podcast, id: 'podcast'
+
+			%tr
+				%td= o.label :delivery_length, 'Time to Delivery: ', class: 'control-label'
+				%td= o.collection_select(:delivery_length, ['Within 24 hours', 'Within 3 days', 'Within 7 days'], :to_s, :to_s)
+
+			%tr
+				%td= o.label :total, 'Your Total: ', class: 'control-label'
+				%td= o.text_field :total, disabled: true
+
+			%tr
 				%td
-			%tr
-				%td= o.submit 'Place Order'
+					-if current_user.stripe_token.nil?
+						= o.submit 'Place Order', disabled: true, class: 'btn disabled', id: 'place_order_button'
+						= link_to "You don't have a card on file. Add one here... then you can place an order for a transcript.", account_details_path, class: "no_card_link"
+					-else
+						= o.submit 'Place Order', class: "btn btn-primary", id: 'place_order_button'
+	%audio#podcast_audio{display: 'hidden'}
+	:javascript
+		$('#podcast').change(function(e){
+			var file = e.currentTarget.files[0];
+			file = URL.createObjectURL(file);
+			var podcastAudio = $("#podcast_audio");
+			podcastAudio.prop('src', file);
+			podcastAudio.on("canplaythrough", function(e){
+				var duration = e.currentTarget.duration;
+				$('#order_total').val(duration);
+			});
+		});

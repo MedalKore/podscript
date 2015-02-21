@@ -2,7 +2,11 @@ class SessionsController < ApplicationController
 
   def create
   	if current_user
-  		redirect_to :user_index
+      if current_user.pending_orders
+        redirect_to :pending_orders
+      else
+        redirect_to :user_index
+      end
   	else
   		user = User.find_by(email: params[:log_in][:email])
   		if user.nil?
@@ -11,14 +15,18 @@ class SessionsController < ApplicationController
   			redirect_to :login
   		else user.authenticate(params[:log_in][:password])
   			sign_in user
-  			redirect_to :user_index
-  			return
+        if current_user.pending_orders.first
+          redirect_to :pending_orders
+        else
+          redirect_to :user_index
+        end
+        return
   		end
   	end
   end
 
   def delete
-  	sign_out
+    cookies.delete(:auth_token)
   	redirect_to :root
   end
 
@@ -30,9 +38,5 @@ class SessionsController < ApplicationController
     	value: user.auth_token
     }
     current_user = user
-  end
-
-  def sign_out
-  	cookies.delete(:auth_token)
   end
 end

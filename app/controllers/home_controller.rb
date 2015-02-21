@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-  	if current_user?
+  	if current_user
   		redirect_to :user_index
   	end
   end
@@ -9,14 +9,15 @@ class HomeController < ApplicationController
   end
 
   def signup
-  	if current_user?
+  	if current_user
   		redirect_to :user_index
   	end
   end
 
   def login
-  	if current_user?
-  		redirect_to :user_index
+  	if current_user
+      pending
+  		#redirect_to :user_index
   	end
   end
 

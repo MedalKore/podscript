@@ -1,5 +1,95 @@
+@import "bootstrap-variables.scss"
+
+@media only screen and (min-width: 1100px)
+	body
+		font-size: 11pt
+
+	#participants
+		span
+			font-size: 9pt
+
+@media only screen and (min-width: 1450px)
+	body
+		font-size: 13pt
+
+	#participants
+		span
+			font-size: 11pt
+
+@media only screen and (min-width: 1600px)
+	body
+		font-size: 15pt
+
+	table td
+		#participants
+			span
+				font-size: 12pt
+
+body .container
+	width: 75%
+	margin-left: auto
+
+nav .container
+	width: 98%
+
+.content
+	margin-top: 3%
+	margin-left: auto
+	margin-right: auto
+	width: 50%
+
+.navbar-brand
+	font-size: 17pt
+
+#navbar
+	float: right
+
+.new_order
+	label
+		float: left
+		text-align: right
+
 #account_sidebar
 	float: left
-	position: relative
-	margin-left: -150px
-	
+	position: fixed
+	margin-left: -2.1%
+	margin-top: -1%
+	background: $gray-darker
+	height: 100%
+	width: 13%
+	ul
+		list-style-type: none
+		margin-top: 5%
+		margin-left: -2%
+		height: 100%
+		li
+			a
+				margin-left: .1%
+				text-decoration: none
+				color: $gray-lighter
+				height: inherit
+				width: inherit
+				padding: 2%
+		li:hover
+			background: $gray
+
+table
+	width: 110%
+	font-size: 12pt
+	td
+		width: 20%
+		padding: 2px
+		.no_card_link
+			font-size: 10pt
+			margin-right: 10%
+			width: 200px
+			float: left
+			color: red
+			background: yellow
+
+#place_order_button
+	margin-bottom: 5px
+	float: left
+
+
+#order_total

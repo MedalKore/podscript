@@ -23,17 +23,17 @@ default: &default
 
 development:
   <<: *default
-  database: podscript_development
+  database: techscripts_development
 
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user that initialized the database.
-  username: postgres
+  username: eclectic
 
   # The password associated with the postgres role (username).
-  password: password
+  password: crownbearyou
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -58,9 +58,9 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: podscript_test
-  username: postgres
-  password: password
+  database: techscripts_test
+  username: eclectic
+  password: crownbearyou
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -83,6 +83,6 @@ test:
 #
 production:
   <<: *default
-  database: podscript_production
-  username: podscript
-  password: <%= ENV['PODSCRIPT_DATABASE_PASSWORD'] %>
+  database: techscripts_production
+  username: techscripts
+  password: <%= ENV['TECHSCRIPTS_DATABASE_PASSWORD'] %>

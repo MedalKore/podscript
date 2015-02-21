@@ -6,7 +6,7 @@ class AccountController < ApplicationController
 
   def place_an_order
   	is_current_user_nil
-
+    @collection
   end
 
   def past_orders
@@ -32,12 +32,13 @@ class AccountController < ApplicationController
   def create
   	email = params[:user][:email]
   	password = params[:user][:password]
+    password_confirmation = params[:user][:password_confirmation]
   	first_name = params[:user][:first_name]
   	last_name = params[:user][:last_name]
   	user = User.create(email: email, first_name: first_name, last_name: last_name,
-  		password: password, password_confirmation: password)
+  		password: password, password_confirmation: password_confirmation)
   	if sign_in(user)
-	  	redirect_to :user_index
+	  	redirect_to :place_an_order
 	  end
   end
 

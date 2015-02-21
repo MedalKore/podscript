@@ -4,6 +4,7 @@
 			= link_to 'Order a Transcript', place_an_order_path
 		%li
 			= link_to 'Pending Orders', pending_orders_path
+			%span.badge= current_user.pending_orders.count == 0 ? nil : current_user.pending_orders.count
 		%li
 			= link_to "Past Orders", past_orders_path
 		%li
