@@ -1,0 +1,32 @@
+#update_email
+	= form_for current_user, url: update_user_path do |cu|
+		= cu.label :email, 'Email:'
+		= cu.email_field :email
+		= cu.submit 'Update Email'
+#update_password
+	= form_for current_user, url: update_user_path do |cu|
+		= cu.label :password, 'Password:'
+		= cu.password_field :password
+		%br
+		= cu.label :password_confirmation, 'Password Confirmation:'
+		= cu.password_field :password_confirmation
+		= cu.submit 'Update Password'
+#update_credit_card
+	#stripe_error
+		%noscript JavaScript is not enabled and is required for this form. First enable it in your web browser settings.
+	#current_card= "Card ending in #{current_user.last_4} is linked to your account." if current_user.stripe_token
+	= form_tag update_stripe_token_path, method: 'post', id: 'update_card' do
+		= hidden_field :user, :stripe_card_token
+		= label_tag 'stripe_name', 'Name of Cardholder:'
+		= text_field :stripe, :name, size: '20', data: {stripe: 'name'}, name: nil
+		= label_tag 'stripe_credit_card_number', 'Credit/Debit Card:'
+		= text_field :stripe, :credit_card_number, size: '16', data: {stripe: 'number'}, name: nil
+		%br
+		= label_tag 'stripe_cvc', 'CVC:'
+		= text_field :stripe, :cvc, size: '4', data: {stripe: 'cvc'}, name: nil
+		%br
+		= label_tag 'stripe_exp_month', 'Expiration Date:'
+		= select_month nil, {use_two_digit_numbers: true}, id: "stripe_exp_month", data: {stripe: 'exp-month'}, name: nil
+		= select_year nil, {start_year: Date.today.year, end_year: Date.today.year+15}, id: "stripe_exp_year", data: {stripe: 'exp-year'}, name: nil
+		%br
+		= submit_tag 'Update Card'

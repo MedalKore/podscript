@@ -15,33 +15,66 @@
 		= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
 		= javascript_include_tag 'application', 'data-turbolinks-track' => true
 		= csrf_meta_tags
+		= javascript_include_tag "https://js.stripe.com/v2/"
+		:coffee
+			$ ->
+				Stripe.setPublishableKey('pk_test_7phZBs5zrkc7FD34sQGsjZo3')
+				# Stripe.setPublishableKey('pk_live_Y7ZoV6uo933mc8R2PkCiskrT')
+				subscription.setupForm()
+
+			subscription =
+				setupForm: ->
+					$('#update_card').submit ->
+						$('input[type=submit]').prop('disabled', true)
+						subscription.processCard()
+  
+				processCard: ->
+					expMonth = $('#stripe_exp_month').val()
+					expMonthDigit = if expMonth < 10 then "0"+ expMonth else expMonth
+					card =
+						name: $('#stripe_name').val()
+						number: $('#stripe_credit_card_number').val()
+						cvc: $('#stripe_cvc').val()
+						exp_month: expMonthDigit
+						exp_year: $('#stripe_exp_year').val()
+					Stripe.createToken(card, subscription.handleStripeResponse)
+
+				handleStripeResponse: (status, response) ->
+					if status == 200
+						$('#stripe_card_token').val(response.id)
+						$('#update_card')[0].submit()
+					else
+						alert(status)
+						$('#stripe_error').text(response.error.message)
+						$('input[type=submit]').prop('disabled', false)
+
 	%body
-		%nav.navbar.navbar-inverse.navbar-fixed-top{:role => "navigation"}
+		%nav.navbar.navbar-inverse.navbar-fixed-top{role: "navigation"}
 			.container
 				.navbar-header
-					%button.navbar-toggle.collapsed{:type => "button", :data => {:toggle => "collapse", :target => "#navbar"}, :aria => {:expanded => "false", :controls => "navbar"} }
+					%button.navbar-toggle.collapsed{type: "button", data: {toggle: "collapse", target: "#navbar"}, aria: {expanded: "false", controls: "navbar"}}
 						%span.sr-only Toggle navigation
 						%span.icon-bar
 						%span.icon-bar
 						%span.icon-bar
-					= link_to "Techscripts", root_url, :class => "navbar-brand"
+					= link_to "Techscripts", root_url, class: "navbar-brand"
 				#navbar.collapse.navbar-collapse
 					%ul.nav.navbar-nav
 						-if current_user
 							%li
-								%a{:href => "/logout"} Log Out
+								%a{href: "/logout"} Log Out
 						-else
 							%li
-								%a{:href => "/signup"} Sign Up
+								%a{href: "/signup"} Sign Up
 							%li
-								%a{:href => "/login"} Login
+								%a{href: "/login"} Login
 
 		= render 'layouts/account_sidebar'
 		.container
 			- flash.each do |name, msg|
-				= content_tag :div, :class => "alert alert-#{name == :error ? "danger" : "success" } alert-dismissable", :role => "alert" do
-					%button.close{:type => "button", :data => {:dismiss => "alert"}}
-						%span{:aria => {:hidden => "true"}} &times;
+				= content_tag :div, class: "alert alert-#{name == :error ? "danger" : "success" } alert-dismissable", role: "alert" do
+					%button.close{type: "button", data: {dismiss: "alert"}}
+						%span{aria: {hidden: "true"}} &times;
 						%span.sr-only Close
 					= msg
 			= yield

@@ -19,4 +19,10 @@ class User < ActiveRecord::Base
 	def pending_orders
 		orders.where(transcript: :nil)
 	end
+
+	def save_stripe_customer stripe_card_token
+		stripe_customer_token = Stripe::Customer.create(description: "#{self.email} added a card.", source: stripe_card_token)
+		self.stripe_token = stripe_customer_token.id
+		self.save!
+	end
 end

@@ -4,23 +4,18 @@
 			%tr
 				%td= o.label :podcast_title, 'Podcast Title: '
 				%td= o.text_field :podcast_title
-
 			%tr
 				%td= o.label :order_of_appearance, raw("Order of Appearance of Podcast Participants: <br><span>(Separate with commas)</span>"), id: 'participants'
 				%td= o.text_area :order_of_appearance
-
 			%tr
-				%td= o.label :podcast_subject, 'Podcast Subject: ', class: 'control-label'
+				%td= o.label :podcast_subject, 'Podcast Genre: ', class: 'control-label'
 				%td= o.text_field :podcast_subject
-			
 			%tr
 				%td= o.label :podcast, 'Upload Podcast: ', class: 'control-label'
 				%td= o.file_field :podcast, id: 'podcast'
-
 			%tr
 				%td= o.label :delivery_length, 'Time to Delivery: ', class: 'control-label'
 				%td= o.collection_select(:delivery_length, ['Within 24 hours', 'Within 3 days', 'Within 7 days'], :to_s, :to_s)
-
 			%tr
 				%td= o.label :total, 'Your Total: ', class: 'control-label'
 				%td= o.text_field :total, disabled: true
@@ -36,11 +31,15 @@
 	:javascript
 		$('#podcast').change(function(e){
 			var file = e.currentTarget.files[0];
+			var delivery_length = $('#order_delivery_length').on('change', function(){
+				case $('#order_delivery_length').val()
+				})
 			file = URL.createObjectURL(file);
 			var podcastAudio = $("#podcast_audio");
 			podcastAudio.prop('src', file);
 			podcastAudio.on("canplaythrough", function(e){
 				var duration = e.currentTarget.duration;
-				$('#order_total').val(duration);
+				if 
+				$('#order_total').val(parseInt(duration/60));
 			});
 		});

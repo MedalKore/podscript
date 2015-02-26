@@ -1,15 +1,10 @@
 Rails.application.routes.draw do
 
   get 'employee/index'
-
   get 'employees' => 'employees#login', as: 'employee_login'
-
   get 'employee/logout'
-
   get 'employee/accept_a_job'
-
   get 'employee/submit_a_completed_job'
-
   get 'employee/account_details'
 
   get 'placeanorder' => 'account#place_an_order', as: 'place_an_order'
@@ -21,10 +16,13 @@ Rails.application.routes.draw do
   get 'pendingorders' => 'account#pending_orders', as: 'pending_orders'
 
   get 'accountdetails' => 'account#account_details', as: 'account_details'
+  get 'accountdetails/paymentdetails' => 'account#payment_details', as: 'payment_details'
 
   get 'dashboard' => 'account#index', as: 'user_index'
 
   post 'account/create', as: 'create_account'
+  post 'account/update', as: 'update_user'
+  post 'account/create_or_update_stripe_token', as: 'update_stripe_token'
 
   get 'about' => 'home#about'
 

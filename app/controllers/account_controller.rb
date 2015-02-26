@@ -1,6 +1,7 @@
 class AccountController < ApplicationController
 	layout 'user_application'
 
+
   def index
   end
 
@@ -24,22 +25,39 @@ class AccountController < ApplicationController
   end
 
   def create_order
-  	@order = Order.create(user_id: current_user.id)
+  	order = current_user.orders.build
+    order.last_4 = current_user.last_4
+    order = order.update_attributes(params[:order])
+    podcast = params[:order][:podcast]
+    
+    # credentials = Aws::Credentials(ENV['AWS_access_key_id'], ENV['AWS_secret_access_key'], session_token = nil)
+    # s3 = Aws::S3::Resource.new(region: 'us-west-2', credentials: credentials)
+    # bucket = s3.bucket('techscripts-podcasts')
+    # bucket.object("#{current_user.email}/#{podcast}")
 
+    # Stripe::Charge.create(amount: )
+    redirect_to :pending_orders
   end
 
+  def update_account_details
+    redirect_to :account_details
+  end
 
   def create
-  	email = params[:user][:email]
-  	password = params[:user][:password]
-    password_confirmation = params[:user][:password_confirmation]
-  	first_name = params[:user][:first_name]
-  	last_name = params[:user][:last_name]
-  	user = User.create(email: email, first_name: first_name, last_name: last_name,
-  		password: password, password_confirmation: password_confirmation)
+  	user = User.create(params[:user])
   	if sign_in(user)
 	  	redirect_to :place_an_order
 	  end
+  end
+
+  def update
+    current_user.update_attributes(params[:user])
+  end
+
+  def create_or_update_stripe_token
+    current_user.save_stripe_customer params[:stripe_card_token]
+    flash[:notice] = 'Your card updated successfully!'
+    redirect_to :account_details
   end
 
  	private
