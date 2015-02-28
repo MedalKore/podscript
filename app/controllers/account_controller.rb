@@ -30,8 +30,8 @@ class AccountController < ApplicationController
     order = order.update_attributes(params[:order])
     podcast = params[:order][:podcast]
     
-    # credentials = Aws::Credentials(ENV['AWS_access_key_id'], ENV['AWS_secret_access_key'], session_token = nil)
-    # s3 = Aws::S3::Resource.new(region: 'us-west-2', credentials: credentials)
+    # credentials = Aws::Credentials(AWS['AWS_access_key_id'], AWS['AWS_secret_access_key'], session_token = nil)
+    # s3 = Aws::S3::Resource.new(region: AWS['region'], credentials: credentials)
     # bucket = s3.bucket('techscripts-podcasts')
     # bucket.object("#{current_user.email}/#{podcast}")
 
