@@ -3,22 +3,26 @@
 		= form_for Order.new, url: create_order_url, mulitpart: :true, html: {class: 'new_order form-horizontal'} do |o|
 			%tr
 				%td= o.label :podcast_title, 'Podcast Title: '
-				%td= o.text_field :podcast_title
+				%td= o.text_field :podcast_title, class: 'form-control'
 			%tr
 				%td= o.label :order_of_appearance, raw("Order of Appearance of Participants: <br><span>(Separate with commas)</span>"), id: 'participants'
-				%td= o.text_area :order_of_appearance
+				%td= o.text_area :order_of_appearance, class: 'form-control'
 			%tr
 				%td= o.label :podcast_subject, 'Podcast Genre: ', class: 'control-label'
-				%td= o.text_field :podcast_subject
+				%td= o.text_field :podcast_subject, class: 'form-control'
 			%tr
 				%td= o.label :podcast, 'Upload Podcast: ', class: 'control-label'
-				%td= o.file_field :podcast, id: 'podcast'
+				%td= o.file_field :podcast, id: 'podcast', class: 'form-control'
 			%tr
 				%td= o.label :delivery_length, 'Time to Delivery: ', class: 'control-label'
-				%td= o.collection_select(:delivery_length, Order.order_lengths, :to_i, proc{|length| "Within #{pluralize(length, 'day')}"}, {prompt: true}, {disabled: true})
+				%td
+					-#%div{class: 'delivery-tooltip', title: 'Upload a podcast first then you can select a time to delivery.'}
+					= o.collection_select(:delivery_length, Order.order_lengths, :to_i, proc{|length| "Within #{pluralize(length, 'day')}"}, {prompt: true}, {disabled: true, class: 'form-control', title: 'Upload a podcast first then you can select a time to delivery.'})
 			%tr
 				%td= o.label :total, 'Your Total: ', class: 'control-label'
-				%td= o.text_field :total, disabled: true
+				%td{class: 'input-group'}
+					%span{class: "input-group-addon"}$
+					= o.text_field :total, disabled: true, class: 'form-control'
 
 			%tr
 				%td
@@ -29,6 +33,14 @@
 						= o.submit 'Place Order', class: "btn btn-primary", id: 'place_order_button'
 	%audio#podcast_audio{display: 'hidden'}
 	:javascript
+		var deliveryHover = document.getElementById('order_delivery_length');
+		window.onmousemove = function (e) {
+			var x = e.clientX,
+					y = e.clientY;
+			deliveryHover.style.top = (y + 20) + 'px';
+			deliveryHover.style.left = (x + 20) + 'px';
+		};
+
 		$('#podcast').change(function(e){
 			var duration = 0;
 			var total = 0;
@@ -37,15 +49,15 @@
 				switch($('#order_delivery_length').val()) {
 			  	case "3":
 			  		total = 1.75 * (duration);
-						$('#order_total').val($.number(total, 2));
+						$('#order_total').val("$"+$.number(total, 2));
 						break;
 					case "7":
 						total = 1.05 * (duration);
-						$('#order_total').val($.number(total, 2));
+						$('#order_total').val("$"+$.number(total, 2));
 						break;
 					default:
 						total = 2.5 * (duration);
-						$('#order_total').val($.number(total, 2));
+						$('#order_total').val("$"+$.number(total, 2));
 				}
 				
 			})

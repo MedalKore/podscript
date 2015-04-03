@@ -1,7 +1,6 @@
 module AmazonS3
+  class << self
 
-	class << self
-
-	end
+  end
 
 end
